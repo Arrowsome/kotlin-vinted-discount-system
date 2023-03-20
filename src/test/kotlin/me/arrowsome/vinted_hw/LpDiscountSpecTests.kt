@@ -5,6 +5,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import me.arrowsome.vinted_hw.data.DiscountDao
 import me.arrowsome.vinted_hw.data.ProviderDao
+import me.arrowsome.vinted_hw.spec.Discount
 import me.arrowsome.vinted_hw.spec.LpDiscountSpec
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -40,7 +41,7 @@ class LpDiscountSpecTests {
             discountDao.getDiscountSumByMonth(month = PACK_SM_MR_20231107.date.monthValue)
         } returns 0.0f
 
-        val result = lpDiscountSpec.calculateDiscount(PACK_SM_MR_20231107)
+        val discount = lpDiscountSpec.calculateDiscount(PACK_SM_MR_20231107)
 
         verify {
             providerDao.findFee(
@@ -53,7 +54,7 @@ class LpDiscountSpecTests {
             providerDao.findLowestFee(size = PackSize.SM)
         }
 
-        assertEquals(Result.Success(PACK_SM_MR_20231107_DISCOUNTED), result)
+        assertEquals(DISCOUNT_PACK_SM_MR_20231107, discount)
     }
 
     @Test
@@ -76,7 +77,7 @@ class LpDiscountSpecTests {
             )
         }
 
-        assertEquals(Result.Failure(NoDiscountStatus.IGNORED), result)
+        assertEquals(Discount.Corrupted, result)
     }
 
     @Test
@@ -113,7 +114,7 @@ class LpDiscountSpecTests {
             discountDao.getDiscountSumByMonth(PACK_SM_MR_20231107.date.monthValue)
         }
 
-        assertEquals(Result.Failure(NoDiscountStatus.NON_APPLICABLE), result)
+        assertEquals(Discount.NonApplicable, result)
     }
 
     @Test
@@ -150,18 +151,16 @@ class LpDiscountSpecTests {
             discountDao.getDiscountSumByMonth(month = PACK_SM_MR_20231107.date.monthValue)
         }
 
-        assertTrue(result is Result.Success<DiscountedPack>)
-        assertEquals(result.data.pack, PACK_SM_MR_20231107)
-        assertEquals(result.data.discountAmount, 0.1f, 0.01f)
-        assertEquals(result.data.newPrice, 1.9f, 0.01f)
+        assertTrue(result is Discount.Applied)
+        assertEquals(result.discountAmount, 0.1f, 0.01f)
+        assertEquals(result.newPrice, 1.9f, 0.01f)
     }
 
     @Test
     fun `medium size packs are always ignored`() {
         val result = lpDiscountSpec.calculateDiscount(PACK_MD_LP_20231107)
 
-        assertTrue(result is Result.Failure<NoDiscountStatus>)
-        assertEquals(NoDiscountStatus.IGNORED, result.error)
+        assertEquals(Discount.NonApplicable, result)
     }
 
     @Test
@@ -200,10 +199,9 @@ class LpDiscountSpecTests {
             )
         }
 
-        assertTrue(result is Result.Success<DiscountedPack>)
-        assertEquals(PACK_LG_LP_20231107, result.data.pack)
-        assertEquals(6.90f, result.data.discountAmount)
-        assertEquals(0.0f, result.data.newPrice)
+        assertTrue(result is Discount.Applied)
+        assertEquals(6.90f, result.discountAmount)
+        assertEquals(0.0f, result.newPrice)
     }
 
     @Test
@@ -242,10 +240,9 @@ class LpDiscountSpecTests {
             )
         }
 
-        assertTrue(result is Result.Success<DiscountedPack>)
-        assertEquals(PACK_LG_LP_20231107, result.data.pack)
-        assertEquals(0.0f, result.data.discountAmount)
-        assertEquals(6.90f, result.data.newPrice)
+        assertTrue(result is Discount.Applied)
+        assertEquals(0.0f, result.discountAmount)
+        assertEquals(6.90f, result.newPrice)
     }
 
     @Test
@@ -284,10 +281,9 @@ class LpDiscountSpecTests {
             )
         }
 
-        assertTrue(result is Result.Success<DiscountedPack>)
-        assertEquals(PACK_LG_LP_20231107, result.data.pack)
-        assertEquals(1.1f, result.data.discountAmount, 0.01f)
-        assertEquals(5.80f, result.data.newPrice, 0.01f)
+        assertTrue(result is Discount.Applied)
+        assertEquals(1.1f, result.discountAmount, 0.01f)
+        assertEquals(5.80f, result.newPrice, 0.01f)
     }
 
 }

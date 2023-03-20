@@ -1,5 +1,6 @@
 package me.arrowsome.vinted_hw
 
+import me.arrowsome.vinted_hw.spec.Discount
 import java.time.LocalDate
 
 val PACK_SM_MR_20231107 = Pack(
@@ -8,10 +9,9 @@ val PACK_SM_MR_20231107 = Pack(
     date = LocalDate.parse("2023-11-07")
 )
 
-val PACK_SM_MR_20231107_DISCOUNTED = DiscountedPack(
-    pack = PACK_SM_MR_20231107,
+val DISCOUNT_PACK_SM_MR_20231107 = Discount.Applied(
     discountAmount = 0.5f,
-    newPrice = 1.5f,
+    basePrice = 2.0f,
 )
 
 val PACK_SM_UNKNOWN_20231107 = Pack(

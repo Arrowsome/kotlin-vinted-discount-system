@@ -9,7 +9,7 @@ class LpDiscountSpec(
     private val discountDao: DiscountDao,
 ) {
 
-    fun calculateDiscount(pack: Pack): Result<DiscountedPack, NoDiscountStatus> {
+    fun calculateDiscount(pack: Pack): Discount {
         return when (pack.size) {
             PackSize.SM -> calcSmPackDiscount(pack)
             PackSize.MD -> calcMdPackDiscount(pack)
@@ -17,37 +17,32 @@ class LpDiscountSpec(
         }
     }
 
-    private fun calcSmPackDiscount(pack: Pack): Result<DiscountedPack, NoDiscountStatus> {
+    private fun calcSmPackDiscount(pack: Pack): Discount {
         val fee = providerDao.findFee(pack.provider, pack.size)
-            ?: return Result.Failure(NoDiscountStatus.IGNORED)
+            ?: return Discount.Corrupted
         val minFee = providerDao.findLowestFee(pack.size)
 
         var disAmount = fee - minFee!!
 
         val sumOfMonthDis = discountDao.getDiscountSumByMonth(pack.date.monthValue)
         if (sumOfMonthDis >= 10f)
-            return Result.Failure(NoDiscountStatus.NON_APPLICABLE)
+            return Discount.NonApplicable
         else if ((sumOfMonthDis + disAmount) > 10f)
             disAmount -= ((sumOfMonthDis + disAmount) - 10f)
 
-        val newPrice = fee - disAmount
-
-        return Result.Success(
-            DiscountedPack(
-                pack = pack,
-                discountAmount = disAmount,
-                newPrice = newPrice,
-            )
+        return Discount.Applied(
+            discountAmount = disAmount,
+            basePrice = fee,
         )
     }
 
-    private fun calcMdPackDiscount(pack: Pack): Result<DiscountedPack, NoDiscountStatus> {
-        return Result.Failure(NoDiscountStatus.IGNORED)
+    private fun calcMdPackDiscount(pack: Pack): Discount {
+        return Discount.NonApplicable
     }
 
-    private fun calcLgPackDiscount(pack: Pack): Result<DiscountedPack, NoDiscountStatus> {
+    private fun calcLgPackDiscount(pack: Pack): Discount {
         val fee = providerDao.findFee(pack.provider, pack.size)
-            ?: return Result.Failure(NoDiscountStatus.IGNORED)
+            ?: return Discount.Corrupted
         val count = discountDao.getDiscountCountInMonthBySize(
             pack.date.monthValue,
             pack.size,
@@ -57,17 +52,14 @@ class LpDiscountSpec(
 
         val sumOfMonthDis = discountDao.getDiscountSumByMonth(pack.date.monthValue)
         if (sumOfMonthDis >= 10f)
-            return Result.Failure(NoDiscountStatus.NON_APPLICABLE)
+            return Discount.NonApplicable
         else if ((sumOfMonthDis + disAmount) > 10f)
             disAmount -= ((sumOfMonthDis + disAmount) - 10f)
 
-        val newPrice = fee - disAmount
-
-        return Result.Success(DiscountedPack(
-            pack = pack,
+        return Discount.Applied(
             discountAmount = disAmount,
-            newPrice = newPrice,
-        ))
+            basePrice = fee,
+        )
     }
 
 }
