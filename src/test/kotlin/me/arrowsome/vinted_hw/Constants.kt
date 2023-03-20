@@ -10,6 +10,7 @@ val PACK_SM_MR_20231107 = Pack(
 )
 
 val DISCOUNT_PACK_SM_MR_20231107 = Discount.Applied(
+    pack = PACK_SM_MR_20231107,
     discountAmount = 0.5f,
     basePrice = 2.0f,
 )

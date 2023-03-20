@@ -1,12 +1,9 @@
-package me.arrowsome.vinted_hw
+package me.arrowsome.vinted_hw.spec
 
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
+import me.arrowsome.vinted_hw.*
 import me.arrowsome.vinted_hw.data.DiscountDao
 import me.arrowsome.vinted_hw.data.ProviderDao
-import me.arrowsome.vinted_hw.spec.Discount
-import me.arrowsome.vinted_hw.spec.LpDiscountSpec
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
