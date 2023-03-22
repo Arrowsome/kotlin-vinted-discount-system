@@ -1,12 +1,12 @@
 package me.arrowsome.vinted_hw.data
 
-import me.arrowsome.vinted_hw.PackProvider
-import me.arrowsome.vinted_hw.PackSize
+import me.arrowsome.vinted_hw.model.Courier
+import me.arrowsome.vinted_hw.model.Size
 
 class ProviderDao {
 
-    fun findFee(provider: PackProvider, size: PackSize): Float? = TODO()
+    fun findFee(provider: Courier, size: Size): Float = TODO()
 
-    fun findLowestFee(size: PackSize): Float? = TODO()
+    fun findLowestFee(size: Size): Float = TODO()
 
 }
