@@ -18,9 +18,10 @@ class ThirdLgOnTheHouse(private val shipmentDao: ShipmentDao) : BaseRule() {
     }
 
     private fun calcDiscount(shipment: Shipment): Shipment {
-        val count = shipmentDao.getDiscountCountInMonthBySize(
+        val count = shipmentDao.getDiscountCountInMonthBySizeAndCourier(
             shipment.date.monthValue,
             shipment.size,
+            shipment.courier,
         )
 
         val discount = if (count == 3) shipment.fee.base else 0f

@@ -1,11 +1,30 @@
 package me.arrowsome.vinted_hw.data
 
+import me.arrowsome.vinted_hw.model.Courier
 import me.arrowsome.vinted_hw.model.Size
 
 class ShipmentDao {
 
-    fun getDiscountSumByMonth(month: Int): Float = TODO()
+    fun insertShipment(month: Int, discount: Float, courier: Courier, size: Size) {
+        shipmentTable.add(
+            ShipmentRow(
+                month,
+                size,
+                courier,
+                discount,
+            )
+        )
+    }
 
-    fun getDiscountCountInMonthBySize(month: Int, size: Size): Int = TODO()
+    fun getDiscountSumByMonth(month: Int): Float {
+        return shipmentTable
+            .filter { it.month == month }
+            .sumOf { it.discount.toDouble() }.toFloat()
+    }
+
+    fun getDiscountCountInMonthBySizeAndCourier(month: Int, size: Size, courier: Courier): Int  {
+        return shipmentTable
+            .count { it.month == month && it.size == size && it.courier == courier }
+    }
 
 }

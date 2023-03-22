@@ -3,7 +3,7 @@ package me.arrowsome.vinted_hw.rule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import me.arrowsome.vinted_hw.data.ProviderDao
+import me.arrowsome.vinted_hw.data.CourierDao
 import me.arrowsome.vinted_hw.model.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -11,7 +11,7 @@ import java.time.LocalDate
 import kotlin.test.assertEquals
 
 class SmMatchMinFeeTest {
-    private lateinit var providerDao: ProviderDao
+    private lateinit var providerDao: CourierDao
     private lateinit var smMatchMinFee: SmMatchMinFee
 
     @BeforeEach

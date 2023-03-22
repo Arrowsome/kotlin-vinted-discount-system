@@ -23,13 +23,21 @@ class ThirdLgOnTheHouseTest {
     @Test
     fun `the third large pack shipping is discounted in a month`() {
         every {
-            shipmentDao.getDiscountCountInMonthBySize(SHIPMENT_LG.date.monthValue, SHIPMENT_LG.size)
+            shipmentDao.getDiscountCountInMonthBySizeAndCourier(
+                SHIPMENT_LG.date.monthValue,
+                SHIPMENT_LG.size,
+                SHIPMENT_LG.courier,
+            )
         } returns 3
 
         val shipment = thirdLgOnTheHouse.applyDiscount(SHIPMENT_LG)
 
         verify {
-            shipmentDao.getDiscountCountInMonthBySize(SHIPMENT_LG.date.monthValue, SHIPMENT_LG.size)
+            shipmentDao.getDiscountCountInMonthBySizeAndCourier(
+                SHIPMENT_LG.date.monthValue,
+                SHIPMENT_LG.size,
+                SHIPMENT_LG.courier,
+            )
         }
         assertEquals(DiscountStatus.APPLIED, shipment.fee.discountStatus)
         assertEquals(SHIPMENT_LG.fee.base, shipment.fee.discount)
@@ -38,13 +46,21 @@ class ThirdLgOnTheHouseTest {
     @Test
     fun `non third large pack has non applicable discount status`() {
         every {
-            shipmentDao.getDiscountCountInMonthBySize(SHIPMENT_LG.date.monthValue, SHIPMENT_LG.size)
+            shipmentDao.getDiscountCountInMonthBySizeAndCourier(
+                SHIPMENT_LG.date.monthValue,
+                SHIPMENT_LG.size,
+                SHIPMENT_LG.courier,
+            )
         } returns 2
 
         val shipment = thirdLgOnTheHouse.applyDiscount(SHIPMENT_LG)
 
         verify {
-            shipmentDao.getDiscountCountInMonthBySize(SHIPMENT_LG.date.monthValue, SHIPMENT_LG.size)
+            shipmentDao.getDiscountCountInMonthBySizeAndCourier(
+                SHIPMENT_LG.date.monthValue,
+                SHIPMENT_LG.size,
+                SHIPMENT_LG.courier,
+            )
         }
         assertEquals(DiscountStatus.NON_APPLICABLE, shipment.fee.discountStatus)
         assertEquals(0f, shipment.fee.discount)
@@ -52,15 +68,8 @@ class ThirdLgOnTheHouseTest {
 
     @Test
     fun `non large pack has non applicable discount status`() {
-        every {
-            shipmentDao.getDiscountCountInMonthBySize(SHIPMENT_MD.date.monthValue, SHIPMENT_MD.size)
-        } returns 3
+        val shipment = thirdLgOnTheHouse.applyDiscount(SHIPMENT_SM)
 
-        val shipment = thirdLgOnTheHouse.applyDiscount(SHIPMENT_MD)
-
-        verify {
-            shipmentDao.getDiscountCountInMonthBySize(SHIPMENT_MD.date.monthValue, SHIPMENT_MD.size)
-        }
         assertEquals(DiscountStatus.NON_APPLICABLE, shipment.fee.discountStatus)
         assertEquals(0f, shipment.fee.discount)
     }
@@ -78,6 +87,13 @@ class ThirdLgOnTheHouseTest {
             courier = Courier.LP,
             date = LocalDate.parse("2023-07-29"),
             fee = Fee(base = 2.5f, discount = 1.5f)
+        )
+
+        private val SHIPMENT_SM = Shipment(
+            size = Size.SM,
+            courier = Courier.LP,
+            date = LocalDate.parse("2023-07-29"),
+            fee = Fee(base = 2f, discount = 0f)
         )
     }
 }
