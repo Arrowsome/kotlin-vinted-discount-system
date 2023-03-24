@@ -95,7 +95,7 @@ class ShipmentFileProcessor(
             fee = feeObj
         )
 
-        return RuleFactory()
+        return RuleFactory
             .create(courierObj)
             .applyDiscount(shipmentObj)
     }

@@ -4,7 +4,7 @@ import me.arrowsome.vinted_hw.data.CourierDao
 import me.arrowsome.vinted_hw.model.Shipment
 import me.arrowsome.vinted_hw.model.Size
 
-class SmMatchMinFee(private val providerDao: CourierDao) : BaseRule() {
+class SmMatchMinFee(private val courierDao: CourierDao) : BaseRule() {
 
     override fun applyDiscount(shipment: Shipment): Shipment {
         val newShipment = if (shipment.size == Size.SM)
@@ -17,7 +17,7 @@ class SmMatchMinFee(private val providerDao: CourierDao) : BaseRule() {
     }
 
     private fun calcDiscount(shipment: Shipment): Shipment {
-        val minFee = providerDao.findLowestFee(shipment.size)
+        val minFee = courierDao.findLowestFee(shipment.size)
 
         val discount = shipment.fee.base - minFee
 

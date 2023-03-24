@@ -2,6 +2,7 @@ package me.arrowsome.vinted_hw.rule
 
 import me.arrowsome.vinted_hw.data.CourierDao
 import me.arrowsome.vinted_hw.data.ShipmentDao
+import me.arrowsome.vinted_hw.di.ServiceLocator
 import me.arrowsome.vinted_hw.model.Courier
 import me.arrowsome.vinted_hw.model.Shipment
 
@@ -14,9 +15,10 @@ abstract class BaseRule : Rule {
     override var nextRule: Rule? = null
 }
 
-class RuleFactory {
-    private val courierDao = CourierDao()
-    private val shipmentDao = ShipmentDao()
+object RuleFactory {
+    private val smMonthlyLimit = ServiceLocator.get<SmMatchMinFee>()
+    private val thirdLgOnTheHouse = ServiceLocator.get<ThirdLgOnTheHouse>()
+    private val monthlyLimit = ServiceLocator.get<MonthlyLimit>()
 
     fun create(courier: Courier): Rule = when (courier) {
         Courier.LP -> lpRules
@@ -24,22 +26,17 @@ class RuleFactory {
     }
 
     private val lpRules by lazy {
-//        SmMatchMinFee(courierDao)
-//            .then(ThirdLgOnTheHouse(shipmentDao)
-//                .then(MonthlyLimit(shipmentDao)))
         chain(
-            SmMatchMinFee(courierDao),
-            ThirdLgOnTheHouse(shipmentDao),
-            MonthlyLimit(shipmentDao),
+            smMonthlyLimit,
+            thirdLgOnTheHouse,
+            monthlyLimit,
         )
     }
 
     private val mrRules by lazy {
-//        SmMatchMinFee(courierDao)
-//            .then(MonthlyLimit(shipmentDao))
         chain(
-            SmMatchMinFee(courierDao),
-            MonthlyLimit(shipmentDao),
+            smMonthlyLimit,
+            monthlyLimit,
         )
     }
 
