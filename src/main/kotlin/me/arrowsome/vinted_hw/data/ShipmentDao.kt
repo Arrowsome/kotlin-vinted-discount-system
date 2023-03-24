@@ -19,7 +19,7 @@ class ShipmentDao {
     fun getDiscountSumByMonth(month: Int): Float {
         return shipmentTable
             .filter { it.month == month }
-            .sumOf { it.discount.toDouble() }.toFloat()
+            .fold(0f) { acc, row -> acc + row.discount }
     }
 
     fun getDiscountCountInMonthBySizeAndCourier(month: Int, size: Size, courier: Courier): Int  {

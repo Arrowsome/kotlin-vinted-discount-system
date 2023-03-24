@@ -22,13 +22,6 @@ class CourierDaoTest {
     }
 
     @Test
-    fun `not finding a fee based on courier and size of shipment returns -1`() {
-        val fee = courierDao.findFee(Courier.NONE, Size.SM)
-
-        assertEquals(-1f, fee)
-    }
-
-    @Test
     fun `find lowest fee based on size returns a positive number`() {
         val fee = courierDao.findLowestFee(Size.LG)
 

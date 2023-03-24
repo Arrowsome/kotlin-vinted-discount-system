@@ -28,7 +28,7 @@ class ThirdLgOnTheHouseTest {
                 SHIPMENT_LG.size,
                 SHIPMENT_LG.courier,
             )
-        } returns 3
+        } returns 2
 
         val shipment = thirdLgOnTheHouse.applyDiscount(SHIPMENT_LG)
 
@@ -51,7 +51,7 @@ class ThirdLgOnTheHouseTest {
                 SHIPMENT_LG.size,
                 SHIPMENT_LG.courier,
             )
-        } returns 2
+        } returns 4
 
         val shipment = thirdLgOnTheHouse.applyDiscount(SHIPMENT_LG)
 

@@ -24,7 +24,7 @@ class ThirdLgOnTheHouse(private val shipmentDao: ShipmentDao) : BaseRule() {
             shipment.courier,
         )
 
-        val discount = if (count == 3) shipment.fee.base else 0f
+        val discount = if (count == 2) shipment.fee.base else 0f
 
         return shipment.copy(
             fee = shipment.fee.copy(
