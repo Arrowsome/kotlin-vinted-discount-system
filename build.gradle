@@ -29,5 +29,5 @@ compileTestKotlin {
 }
 
 application {
-    mainClassName = 'MainKt'
+    mainClassName = 'me/arrowsome/vinted_hw/MainKt'
 }
