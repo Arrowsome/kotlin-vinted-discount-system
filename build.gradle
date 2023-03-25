@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.7.21'
     id 'application'
+    id 'com.adarshr.test-logger' version '3.2.0'
 }
 
 group = 'me.arrowsome'
@@ -30,4 +31,8 @@ compileTestKotlin {
 
 application {
     mainClassName = 'me/arrowsome/vinted_hw/MainKt'
+}
+
+testlogger {
+    theme 'standard'
 }

@@ -8,6 +8,7 @@ believe the design could be flawed and improved upon significantly.
 ````shell
 # For running project on the root directory execute:
 
+$ ./gradlew build
 $ ./gradlew run
 ````
 
@@ -34,7 +35,8 @@ $ ./gradlew test
 As requested no additional dependencies have been added beside Kotlin standard library unless it's
 needed for testing.
 
-1. **Mockk**: for mocking objects while unit testing
-2. **JUnit5**: for Unit tests
-3. **approvaltests**: for approval testing
+1. **Mockk**: mocking objects while unit testing a class
+2. **JUnit5**: Unit testing
+3. **approvaltests**: approval testing
+4. **test-logger**: to pretty print test outputs run in cli mode.
 
