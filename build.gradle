@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'me.arrowsome'
-version = '1.0-SNAPSHOT'
+//version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -35,4 +35,21 @@ application {
 
 testlogger {
     theme 'standard'
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes "Main-Class": "me.arrowsome.vinted_hw.MainKt"
+    }
+
+    archiveFileName = 'discount_system.jar'
+
+    // Add this
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
 }

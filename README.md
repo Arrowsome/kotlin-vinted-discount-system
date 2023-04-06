@@ -2,8 +2,7 @@
 
 This project has been build following the Vinted instructions [here](https://gist.github.com/vintedEngineering/7a24d2bb2ef4189447c6b938604ab030)
 
-The project uses Kotlin to bring a simple discount system with oop + functional programming paradigm into practice. I
-believe the design could be flawed and improved upon significantly.
+The project uses Kotlin to bring a simple discount system with oop + functional programming paradigm into practice.
 
 ````shell
 # For running project on the root directory execute:
@@ -32,8 +31,7 @@ $ ./gradlew test
 
 #### Dependencies
 
-As requested no additional dependencies have been added beside Kotlin standard library unless it's
-needed for testing.
+As requested no additional dependencies have been added beside Kotlin standard library and testing libs.
 
 1. **Mockk**: mocking objects while unit testing a class
 2. **JUnit5**: Unit testing
